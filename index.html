@@ -34,6 +34,7 @@
 				background-color: rgba(0, 0, 0, 0.5);
 				margin: 5px auto 5px auto;
 				position: relative;
+				border: 5px inset rgb(255, 255, 255);
 			}
 
 			.row
@@ -135,6 +136,7 @@
 			{
 				width: 400%;
 				height: 100%;
+				margin-left: 0%;
 			}
 
 			.aspect
@@ -151,6 +153,7 @@
 				colors: ["red", "purple", "cyan", "yellow"],
 				currentBlock: null,
 				nextBlock: null,
+				currentPosition: { x: 0, y: 0, r: 0},
 				shapes: 
 				[
 					[
@@ -276,7 +279,7 @@
 					this.nextBlock = this.getRandomBlock();
 
 					this.renderGrid();
-					this.renderNextBlock();
+					//this.populateAspect();
 				},
 				renderGrid: function()
 				{
@@ -322,12 +325,12 @@
 				},
 				getRandomBlock: function()
 				{
-					return {"shape": 0, "color": "red"};
+					return {"shape": 3, "color": "cyan"};
 				},
 				populateAspect: function(id, shape, color, className)
-				{console.log(id, shape, color, className)
+				{
 					var container = document.getElementById(id);
-console.log(container)
+
 					for (var i = 0; i < shape.length; i++)
 					{
 						for (var j = 0; j < shape[i].length; j++)
@@ -337,6 +340,15 @@ console.log(container)
 							container.appendChild(square);
 						}	
 					}					
+				},
+				rotateBlock: function()
+				{
+					var r = (this.currentPosition.r == 3 ? 0 : this.currentPosition.r + 1);
+
+					//TODO: test position
+					var container = document.getElementById("movingBlockAspects");
+					container.style.marginLeft = "-" + (r * 100) + "%";
+					this.currentPosition.r = r;
 				}
 			}
 		</script>
@@ -363,7 +375,7 @@ console.log(container)
 			<div id="footer">
 				<div class="buttons">
 					<br />
-					<button>R</button>
+					<button onclick="game.rotateBlock()">R</button>
 				</div>
 
 				<div class="buttons">
