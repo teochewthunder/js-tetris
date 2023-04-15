@@ -4,11 +4,13 @@
 		<title>JS Tetris</title>
 
 		<style>
-			div { outline: 1px solid red;}
+			div { outline: 0px solid red;}
 
 			body
 			{
 				background-color: rgb(0, 0, 0);
+				font-family: sans-serif;
+				font-size: 10px;
 			}
 
 			#container
@@ -27,6 +29,40 @@
 				background-color: rgba(255, 255, 255, 0.2);
 			}
 
+			#topDisplay
+			{
+				width: 200px;
+				height: 60px;
+				background-color: rgba(0, 0, 0, 0.5);
+				margin: 5px auto 5px auto;
+				position: relative;
+				border: 5px inset rgb(155, 155, 155);
+			}
+
+			#header_left
+			{
+				width: 50%;
+				height: 100%;
+				padding: 5px;
+				float: left;
+			}
+
+			#header_right
+			{
+				width: 35%;
+				height: 100%;
+				padding: 5px;
+				float: right;
+			}
+
+			#gridNext
+			{
+				width: 40px;
+				height: 40px;
+				margin: 5px auto 0 auto;
+				padding: 5px;
+			}
+
 			#grid
 			{
 				width: 200px;
@@ -34,7 +70,7 @@
 				background-color: rgba(0, 0, 0, 0.5);
 				margin: 5px auto 5px auto;
 				position: relative;
-				border: 5px inset rgb(255, 255, 255);
+				border: 5px inset rgb(155, 155, 155);
 			}
 
 			.row
@@ -48,6 +84,13 @@
 			{
 				width: 20px;
 				height: 20px;
+				float: left;
+			}
+
+			.square_small
+			{
+				width: 10px;
+				height: 10px;
 				float: left;
 			}
 
@@ -279,7 +322,7 @@
 					this.nextBlock = this.getRandomBlock();
 
 					this.renderGrid();
-					//this.populateAspect();
+					this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
 				},
 				renderGrid: function()
 				{
@@ -330,6 +373,7 @@
 				populateAspect: function(id, shape, color, className)
 				{
 					var container = document.getElementById(id);
+					container.innerHTML = "";
 
 					for (var i = 0; i < shape.length; i++)
 					{
@@ -357,8 +401,20 @@
 	<body onload = game.reset();>
 		<div id="container">
 			<div id="header">
-				<div>TETRIS</div>
-				<div>Next</div>
+				<p>TETRIS</p>
+				<div id="topDisplay">
+					<div id="header_left">
+						STAGE<br />
+						0<br />
+						SCORE<br />
+						0<br />
+					</div>
+
+					<div id="header_right">
+						<small>Next</small><br />
+						<div id="gridNext"></div>
+					</div>
+				</div>
 			</div>
 
 			<div id="grid">
