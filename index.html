@@ -140,31 +140,39 @@
 
 			.buttons:nth-of-type(2) button
 			{
-				width: 6em;
-				height: 1.5em;
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
 			}
 
 			.yellow
 			{
-				outline: 1px solid rgb(255, 255, 0);
 				background-color: rgba(255, 255, 0, 0.8);
 			}
 
-			.cyan
+			.cyan::before
 			{
-				outline: 1px solid rgb(0, 255, 255);
+				content: "";
+				display: block;
+				width: 18px;
+				height: 18px;
+				border: 1px solid rgb(0, 255, 255);
 				background-color: rgba(0, 255, 255, 0.8);
 			}
 
+			.square_small.cyan::before
+			{
+				width: 8px;
+				height: 8px;
+			}			
+
 			.purple
 			{
-				outline: 1px solid rgb(255, 0, 255);
 				background-color: rgba(255, 0, 255, 0.8);
 			}
 
 			.red
 			{
-				outline: 1px solid rgb(255, 0, 0);
 				background-color: rgba(255, 0, 0, 0.8);
 			}
 
@@ -173,6 +181,7 @@
 				position: absolute;
 				width: 80px;
 				height: 80px;
+				overflow: hidden;
 			}
 
 			#movingBlockAspects
@@ -368,7 +377,7 @@
 				},
 				getRandomBlock: function()
 				{
-					return {"shape": 3, "color": "cyan"};
+					return {"shape": 1, "color": "cyan"};
 				},
 				populateAspect: function(id, shape, color, className)
 				{
@@ -385,15 +394,68 @@
 						}	
 					}					
 				},
+				testPosition: function(x, y, r)
+				{
+					var shapeArr = this.shapes[this.currentBlock.shape][r];
+
+					for(var i = 0; i < shapeArr.length; i++)
+					{
+						for(var j = 0; j < shapeArr[i].length; j++)
+						{
+							if (shapeArr[i][j] == 1)
+							{
+								if (j + x <= -1  || j + x >= 10) return false;
+								if (i + y >= 24) return false;
+								if (this.grid[i + y][j + x] == 1) return false;
+							}
+						}
+					}
+
+					return true;
+				},
 				rotateBlock: function()
 				{
 					var r = (this.currentPosition.r == 3 ? 0 : this.currentPosition.r + 1);
+					if (!this.testPosition(this.currentPosition.x, this.currentPosition.y, r)) return;
 
-					//TODO: test position
 					var container = document.getElementById("movingBlockAspects");
 					container.style.marginLeft = "-" + (r * 100) + "%";
 					this.currentPosition.r = r;
-				}
+				},
+				moveLeft: function()
+				{
+					var x = (this.currentPosition.x - 1);
+					if (!this.testPosition(x, this.currentPosition.y, this.currentPosition.r)) return;
+
+					var container = document.getElementById("movingBlock");
+					container.style.marginLeft = (x * 20) + "px";
+					this.currentPosition.x = x;
+				},
+				moveRight: function()
+				{
+					var x = (this.currentPosition.x + 1);
+					if (!this.testPosition(x, this.currentPosition.y, this.currentPosition.r)) return;
+
+					var container = document.getElementById("movingBlock");
+					container.style.marginLeft = (x * 20) + "px";
+					this.currentPosition.x = x;
+				},	
+				moveDown: function()
+				{
+					var y = (this.currentPosition.y + 1);
+					if (!this.testPosition(this.currentPosition.x, y, this.currentPosition.r)) return;
+
+					var container = document.getElementById("movingBlock");
+					container.style.marginTop = (y * 20) + "px";
+					this.currentPosition.y = y;
+				},
+				drop: function()
+				{
+					while(this.testPosition(this.currentPosition.x, this.currentPosition.y, this.currentPosition.r))
+					{
+						this.moveDown();
+					}
+				}			
 			}
 		</script>
 	</head>
@@ -443,11 +505,11 @@
 					<div class="pad">&nbsp;</div>
 					<div class="pad dirPad"><button>U</button></div>
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad"><button>L</button></div>
+					<div class="pad dirPad" onclick="game.moveLeft()"><button>L</button></div>
 					<div class="pad dirPad">&nbsp;</div>
-					<div class="pad dirPad"><button>R</button></div>
+					<div class="pad dirPad" onclick="game.moveRight()"><button>R</button></div>
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad"><button>D</button></div>
+					<div class="pad dirPad" onclick="game.drop()"><button>D</button></div>
 					<div class="pad">&nbsp;</div>
 				</div>
 			</div>
