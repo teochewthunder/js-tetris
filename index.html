@@ -404,8 +404,9 @@
 						{
 							if (shapeArr[i][j] == 1)
 							{
-								if (j + x <= -1  || j + x >= 10) return false;
-								if (i + y >= 24) return false;
+								if (j + x < 0  || j + x > this.grid[0].length - 1) return false;
+								if (i + y >= this.grid.length - 1) return false;
+
 								if (this.grid[i + y][j + x] == 1) return false;
 							}
 						}
@@ -443,7 +444,7 @@
 				moveDown: function()
 				{
 					var y = (this.currentPosition.y + 1);
-					if (!this.testPosition(this.currentPosition.x, y, this.currentPosition.r)) return;
+					if (!this.testPosition(this.currentPosition.x, y, this.currentPosition.r)) this.stopBlock();
 
 					var container = document.getElementById("movingBlock");
 					container.style.marginTop = (y * 20) + "px";
@@ -455,6 +456,10 @@
 					{
 						this.moveDown();
 					}
+				},
+				stopBlock: function()
+				{
+					console.log(this.currentPosition);
 				}			
 			}
 		</script>
