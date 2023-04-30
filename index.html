@@ -263,8 +263,8 @@
 					[
 						[
 							[1, 1, 0, 0],
-							[0, 1, 0, 0],
 							[0, 1, 1, 0],
+							[0, 0, 0, 0],
 							[0, 0, 0, 0]
 						],
 						[
@@ -275,8 +275,8 @@
 						],
 						[
 							[1, 1, 0, 0],
-							[0, 1, 0, 0],
 							[0, 1, 1, 0],
+							[0, 0, 0, 0],
 							[0, 0, 0, 0]
 						],
 						[
@@ -348,7 +348,7 @@
 						{
 							var square = document.createElement("div");
 							square.id = i + "_" + j;
-							square.className = "square";
+							square.className = "square " + this.grid[i][j];
 							row.appendChild(square);
 						}
 
@@ -359,6 +359,8 @@
 
 					var movingBlock = document.createElement("div");
 					movingBlock.id = "movingBlock";
+					movingBlock.style.marginTop = "0px";
+					movingBlock.style.marginLeft = "0px";
 
 					var movingBlockAspects = document.createElement("div");
 					movingBlockAspects.id = "movingBlockAspects";
@@ -377,7 +379,10 @@
 				},
 				getRandomBlock: function()
 				{
-					return {"shape": 1, "color": "cyan"};
+					var shapeIndex = Math.floor(Math.random() * 3);
+					var colorIndex = Math.floor(Math.random() * (this.colors.length - 1));
+
+					return {"shape": shapeIndex, "color": this.colors[colorIndex]};
 				},
 				populateAspect: function(id, shape, color, className)
 				{
@@ -407,7 +412,7 @@
 								if (j + x < 0  || j + x > this.grid[0].length - 1) return false;
 								if (i + y >= this.grid.length - 1) return false;
 
-								if (this.grid[i + y][j + x] == 1) return false;
+								if (this.grid[i + y][j + x] != null) return false;
 							}
 						}
 					}
@@ -459,7 +464,23 @@
 				},
 				stopBlock: function()
 				{
-					console.log(this.currentPosition);
+					var shapeArr = this.shapes[this.currentBlock.shape][this.currentPosition.r];
+
+					for(var i = 0; i < shapeArr.length; i++)
+					{
+						for(var j = 0; j < shapeArr[i].length; j++)
+						{
+							if (shapeArr[i][j] == 1)
+							{
+								this.grid[i + this.currentPosition.y + 1][j + this.currentPosition.x] = this.currentBlock.color;
+							}
+						}
+					}
+
+					this.currentBlock = this.nextBlock;
+					this.nextBlock = this.getRandomBlock();
+					this.renderGrid();
+					this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
 				}			
 			}
 		</script>
