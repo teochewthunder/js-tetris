@@ -202,6 +202,16 @@
 				background-color: rgba(255, 0, 0, 0.8);
 			}
 
+			.white::before
+			{
+				content: "";
+				display: block;
+				width: 18px;
+				height: 18px;
+				border: 1px solid rgb(255, 255, 255);
+				background-color: rgba(255, 255, 255, 0.8);
+			}
+
 			.square_small::before
 			{
 				width: 8px;
@@ -231,6 +241,26 @@
 				height: 100%;
 				float: left;
 			}
+
+			#pauseScreen
+			{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.8);
+				visibility: hidden;
+			}
+
+			#pauseScreen::before
+			{
+				display: block;
+				content: "PAUSED";
+				text-align: center;
+				font-weight: bold;
+				font-size: 2em;
+				color: rgb(255, 255, 255);
+				margin-top: 200px;
+			}
 		</style>
 
 		<script>
@@ -240,6 +270,10 @@
 				currentBlock: null,
 				nextBlock: null,
 				currentPosition: { x: 0, y: 0, r: 0},
+				timer: null,
+				stage: 1,
+				score: 0,
+				paused: false,
 				shapes: 
 				[
 					[
@@ -412,6 +446,11 @@
 					}
 
 					this.positionBlock();
+
+					var pauseScreen = document.createElement("div");
+					pauseScreen.id = "pauseScreen";
+					//pauseScreen.style.visibility = "hidden";
+					grid.appendChild(pauseScreen);
 				},
 				getRandomBlock: function()
 				{
@@ -500,6 +539,7 @@
 				},
 				moveLeft: function()
 				{
+					if (this.paused) return;
 					if (!this.isFullyInFrame()) return;
 
 					var x = (this.currentPosition.x - 1);
@@ -510,6 +550,7 @@
 				},
 				moveRight: function()
 				{
+					if (this.paused) return;
 					if (!this.isFullyInFrame()) return;
 
 					var x = (this.currentPosition.x + 1);
@@ -520,6 +561,7 @@
 				},	
 				moveDown: function()
 				{
+					if (this.paused) return;
 					var y = (this.currentPosition.y + 1);
 					if (!this.testPosition(this.currentPosition.x, y, this.currentPosition.r)) 
 					{
@@ -532,6 +574,7 @@
 				},
 				drop: function()
 				{
+					if (this.paused) return;
 					if (!this.isFullyInFrame()) return;
 
 					while(this.testPosition(this.currentPosition.x, this.currentPosition.y + 1, this.currentPosition.r))
@@ -558,11 +601,58 @@
 						}
 					}
 
+					var hasCompletedRows = this.setCompletedRows();
+					//animation
+
 					this.currentBlock = this.nextBlock;
 					this.nextBlock = this.getRandomBlock();
 					this.renderGrid();
 					this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
-				}			
+				},
+				setPause: function(isAuto)	
+				{
+					this.paused = (this.paused ? false : true);
+
+					if (!isAuto)
+					{
+						pauseScreen.style.visibility = (this.paused ? "visible" : "hidden");
+					}
+				},
+				getInterval: function()
+				{
+					var interval = 1500;
+					var diff = this.stage * 100;
+					interval = interval - diff;
+					if (interval < 100) interval = 100;
+
+					return interval;
+				},
+				setCompletedRows: function()
+				{
+					var hasCompletedRows = false;
+
+					for(var i = 0; i < this.grid.length; i++)
+					{
+						var filled = this.grid[i].length;
+
+						for(var j = 0; j < this.grid[i].length; j++)
+						{
+							if (this.grid[i][j]) filled--;
+						}
+
+						if (filled == 0) 
+						{
+							hasCompletedRows = true;
+
+							for(var j = 0; j < this.grid[i].length; j++) 
+							{
+								this.grid[i][j] = "white";
+							}	
+						}
+					}
+
+					return hasCompletedRows;
+				}		
 			}
 		</script>
 	</head>
@@ -609,7 +699,7 @@
 
 				<div class="buttons">
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad"><button>U</button></div>
+					<div class="pad dirPad" onclick="game.setPause(false)"><button>U</button></div>
 					<div class="pad">&nbsp;</div>
 					<div class="pad dirPad" onclick="game.moveLeft()"><button>L</button></div>
 					<div class="pad dirPad">&nbsp;</div>
