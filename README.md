@@ -1,5 +1,5 @@
 # js-tetris (in progress)
 Tetris written in vanilla JavaScript
 
-- animation
+- compactRows should not compact all the way. Only full rows.
 - start timer functions
