@@ -601,13 +601,42 @@
 						}
 					}
 
-					var hasCompletedRows = this.setCompletedRows();
+					var hasCompletedRows = this.setCompletedRows("white");
 					//animation
+					if (hasCompletedRows)
+					{
+						this.setPause(true);
+						this.renderGrid();
 
-					this.currentBlock = this.nextBlock;
-					this.nextBlock = this.getRandomBlock();
-					this.renderGrid();
-					this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
+						setTimeout(
+							() => 
+							{
+								this.setCompletedRows(null);
+								this.renderGrid();
+
+								setTimeout(
+									() => 
+									{
+										this.compactRows();
+										this.setPause(true);
+
+										this.currentBlock = this.nextBlock;
+										this.nextBlock = this.getRandomBlock();
+										this.renderGrid();
+										this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");										
+									},
+									500
+								); 																},
+							500
+						); 						
+					}
+					else
+					{
+						this.currentBlock = this.nextBlock;
+						this.nextBlock = this.getRandomBlock();
+						this.renderGrid();
+						this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
+					}
 				},
 				setPause: function(isAuto)	
 				{
@@ -627,7 +656,7 @@
 
 					return interval;
 				},
-				setCompletedRows: function()
+				setCompletedRows: function(color)
 				{
 					var hasCompletedRows = false;
 
@@ -646,12 +675,34 @@
 
 							for(var j = 0; j < this.grid[i].length; j++) 
 							{
-								this.grid[i][j] = "white";
+								this.grid[i][j] = color;
 							}	
 						}
 					}
 
 					return hasCompletedRows;
+				},
+				compactRows: function()
+				{
+					for(var i = 0; i <= 9; i++)
+					{
+						for(var j = 19; j >= 1; j--)
+						{
+							if (this.grid[j][i] == null) 
+							{
+								for(var k = j - 1; k >= 0; k--)
+								{
+									if (this.grid[k][i] != null)
+									{
+										color = this.grid[k][i];
+										this.grid[k][i] = null;
+										this.grid[j][i] = color;
+										break;
+									}
+								}								
+							}
+						}
+					}
 				}		
 			}
 		</script>
