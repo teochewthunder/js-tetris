@@ -242,7 +242,7 @@
 				float: left;
 			}
 
-			#pauseScreen
+			#pauseScreen, #stopScreen
 			{
 				position: absolute;
 				width: 100%;
@@ -255,6 +255,17 @@
 			{
 				display: block;
 				content: "PAUSED";
+				text-align: center;
+				font-weight: bold;
+				font-size: 2em;
+				color: rgb(255, 255, 255);
+				margin-top: 200px;
+			}
+
+			#stopScreen::before
+			{
+				display: block;
+				content: "GAME OVER";
 				text-align: center;
 				font-weight: bold;
 				font-size: 2em;
@@ -274,6 +285,7 @@
 				stage: 1,
 				score: 0,
 				paused: false,
+				stopped: false,
 				shapes: 
 				[
 					[
@@ -409,6 +421,9 @@
 				],
 				reset: function() 
 				{
+					this.stopped = false;
+					this.paused = false;
+
 					this.grid = [];
 					for(var i = 0; i < 20; i++)
 					{
@@ -475,8 +490,11 @@
 
 					var pauseScreen = document.createElement("div");
 					pauseScreen.id = "pauseScreen";
-					//pauseScreen.style.visibility = "hidden";
 					grid.appendChild(pauseScreen);
+
+					var stopScreen = document.createElement("div");
+					stopScreen.id = "stopScreen";
+					grid.appendChild(stopScreen);
 				},
 				getRandomBlock: function()
 				{
@@ -555,6 +573,7 @@
 				},
 				rotateBlock: function()
 				{
+					if (this.paused || this.stopped) return;
 					if (!this.isFullyInFrame()) return;
 
 					var r = (this.currentPosition.r == 3 ? 0 : this.currentPosition.r + 1);
@@ -565,7 +584,7 @@
 				},
 				moveLeft: function()
 				{
-					if (this.paused) return;
+					if (this.paused || this.stopped) return;
 					if (!this.isFullyInFrame()) return;
 
 					var x = (this.currentPosition.x - 1);
@@ -576,7 +595,7 @@
 				},
 				moveRight: function()
 				{
-					if (this.paused) return;
+					if (this.paused || this.stopped) return;
 					if (!this.isFullyInFrame()) return;
 
 					var x = (this.currentPosition.x + 1);
@@ -587,7 +606,7 @@
 				},	
 				moveDown: function()
 				{
-					if (this.paused) return;
+					if (this.paused || this.stopped) return;
 					var y = (this.currentPosition.y + 1);
 					if (!this.testPosition(this.currentPosition.x, y, this.currentPosition.r)) 
 					{
@@ -600,7 +619,7 @@
 				},
 				drop: function()
 				{
-					if (this.paused) return;
+					if (this.paused || this.stopped) return;
 					if (!this.isFullyInFrame()) return;
 
 					while(this.testPosition(this.currentPosition.x, this.currentPosition.y + 1, this.currentPosition.r))
@@ -615,6 +634,7 @@
 				stopBlock: function()
 				{
 					var shapeArr = this.shapes[this.currentBlock.shape][this.currentPosition.r];
+					var stopGame = false;
 
 					for(var i = 0; i < shapeArr.length; i++)
 					{
@@ -622,13 +642,20 @@
 						{
 							if (shapeArr[i][j] == 1)
 							{
-								this.grid[i + this.currentPosition.y][j + this.currentPosition.x] = this.currentBlock.color;
+								if (i + this.currentPosition.y >= 0) 
+								{
+									this.grid[i + this.currentPosition.y][j + this.currentPosition.x] = this.currentBlock.color;
+								}
+								else
+								{
+									stopGame = true;
+								}
 							}
 						}
 					}
 
 					var hasCompletedRows = this.setCompletedRows("white");
-					//animation
+
 					if (hasCompletedRows)
 					{
 						this.setPause(true);
@@ -637,7 +664,7 @@
 						setTimeout(
 							() => 
 							{
-								this.setCompletedRows(null);
+								this.setCompletedRows("x");
 								this.renderGrid();
 
 								setTimeout(
@@ -658,20 +685,40 @@
 					}
 					else
 					{
-						this.currentBlock = this.nextBlock;
-						this.nextBlock = this.getRandomBlock();
-						this.renderGrid();
-						this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
+						if (stopGame)
+						{
+							this.setStop();
+						}
+						else
+						{
+							this.currentBlock = this.nextBlock;
+							this.nextBlock = this.getRandomBlock();
+							this.renderGrid();
+							this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");							
+						}
+
 					}
 				},
 				setPause: function(isAuto)	
 				{
+					if (this.stopped) return;
+
 					this.paused = (this.paused ? false : true);
 
 					if (!isAuto)
 					{
+						var pauseScreen = document.getElementById("pauseScreen");
 						pauseScreen.style.visibility = (this.paused ? "visible" : "hidden");
 					}
+				},
+				setStop: function()	
+				{
+					this.stopped = (this.stopped ? false : true);
+
+					var stopScreen = document.getElementById("stopScreen");
+					stopScreen.style.visibility = (this.stopped ? "visible" : "hidden");
+
+					if (!this.stopped) this.reset();
 				},
 				getInterval: function()
 				{
@@ -710,25 +757,20 @@
 				},
 				compactRows: function()
 				{
-					for(var i = 0; i <= 9; i++)
+					var tempArr = [];
+
+					for(var i = 0; i < this.grid.length; i++)
 					{
-						for(var j = 19; j >= 1; j--)
+						if (this.grid[i][0] != "x")
 						{
-							if (this.grid[j][i] == null) 
-							{
-								for(var k = j - 1; k >= 0; k--)
-								{
-									if (this.grid[k][i] != null)
-									{
-										color = this.grid[k][i];
-										this.grid[k][i] = null;
-										this.grid[j][i] = color;
-										break;
-									}
-								}								
-							}
+							tempArr.push(this.grid[i]);
 						}
 					}
+
+					var rowsToAdd = this.grid.length - tempArr.length;
+					for (i = 0; i < rowsToAdd; i++) tempArr.unshift([null, null, null, null, null, null, null, null, null, null]);
+
+					this.grid = tempArr;
 				}		
 			}
 		</script>
@@ -771,7 +813,7 @@
 
 				<div class="buttons">
 					<br />
-					<button>S</button>
+					<button onclick="game.setStop()">S</button>
 				</div>
 
 				<div class="buttons">
