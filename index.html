@@ -421,6 +421,12 @@
 				],
 				reset: function() 
 				{
+					this.score = 0;
+					this.stage = 1;
+
+					this.setScore();
+					this.setStage();
+
 					this.stopped = false;
 					this.paused = false;
 
@@ -654,10 +660,11 @@
 						}
 					}
 
-					var hasCompletedRows = this.setCompletedRows("white");
+					var completedRows = this.setCompletedRows("white");
 
-					if (hasCompletedRows)
+					if (completedRows > 0)
 					{
+						this.addToScore(completedRows);
 						this.setPause(true);
 						this.renderGrid();
 
@@ -720,6 +727,26 @@
 
 					if (!this.stopped) this.reset();
 				},
+				setScore: function()
+				{
+					var container = document.getElementById("txtScore");
+					container.innerHTML = this.score;
+				},
+				setStage: function()
+				{
+					var container = document.getElementById("txtStage");
+					container.innerHTML = this.stage;
+				},
+				addToScore: function(rows)
+				{
+					var pointsPerRow = 100;
+					var pointsPerStage = 1000;
+					this.score += (pointsPerRow * rows);
+					this.stage = Math.floor(this.score / pointsPerStage);
+
+					this.setScore();
+					this.setStage();
+				},
 				getInterval: function()
 				{
 					var interval = 1500;
@@ -731,7 +758,7 @@
 				},
 				setCompletedRows: function(color)
 				{
-					var hasCompletedRows = false;
+					var completedRows = 0;
 
 					for(var i = 0; i < this.grid.length; i++)
 					{
@@ -744,7 +771,7 @@
 
 						if (filled == 0) 
 						{
-							hasCompletedRows = true;
+							completedRows++;
 
 							for(var j = 0; j < this.grid[i].length; j++) 
 							{
@@ -753,7 +780,7 @@
 						}
 					}
 
-					return hasCompletedRows;
+					return completedRows;
 				},
 				compactRows: function()
 				{
@@ -783,9 +810,9 @@
 				<div id="topDisplay">
 					<div id="header_left">
 						STAGE<br />
-						0<br />
+						<span id="txtStage">0</span><br />
 						SCORE<br />
-						0<br />
+						<span id="txtScore">0</span><br />
 					</div>
 
 					<div id="header_right">
