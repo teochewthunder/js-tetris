@@ -78,6 +78,7 @@
 				margin: 5px auto 5px auto;
 				position: relative;
 				border: 5px inset rgb(155, 155, 155);
+				overflow: hidden;
 			}
 
 			.row
@@ -428,7 +429,8 @@
 					this.setStage();
 
 					this.stopped = false;
-					this.paused = false;
+					this.paused = true;
+					this.setPause(true);
 
 					this.grid = [];
 					for(var i = 0; i < 20; i++)
@@ -520,11 +522,6 @@
 						{
 							var square = document.createElement("div");
 							square.className = className + " " + (shape[i][j] == 1 ? color : "");
-
-							if (className == "square" && (this.currentPosition.y + i) < 0) //special case for cropping
-							{
-								//square.className = className;
-							}
 
 							container.appendChild(square);
 						}	
@@ -678,15 +675,17 @@
 									() => 
 									{
 										this.compactRows();
-										this.setPause(true);
 
 										this.currentBlock = this.nextBlock;
 										this.nextBlock = this.getRandomBlock();
 										this.renderGrid();
-										this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");										
+										this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");
+
+										this.setPause(true);									
 									},
 									500
-								); 																},
+								); 																
+							},
 							500
 						); 						
 					}
@@ -701,9 +700,8 @@
 							this.currentBlock = this.nextBlock;
 							this.nextBlock = this.getRandomBlock();
 							this.renderGrid();
-							this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");							
+							this.populateAspect("gridNext", this.shapes[this.nextBlock.shape][0], this.nextBlock.color, "square_small");	
 						}
-
 					}
 				},
 				setPause: function(isAuto)	
@@ -717,6 +715,21 @@
 						var pauseScreen = document.getElementById("pauseScreen");
 						pauseScreen.style.visibility = (this.paused ? "visible" : "hidden");
 					}
+
+					if (this.paused)
+					{
+						clearInterval(this.timer);
+					}
+					else
+					{
+						this.timer = setInterval(
+							()=> 
+							{
+								this.moveDown()
+							},
+							this.getInterval()
+						)
+					}
 				},
 				setStop: function()	
 				{
@@ -725,7 +738,14 @@
 					var stopScreen = document.getElementById("stopScreen");
 					stopScreen.style.visibility = (this.stopped ? "visible" : "hidden");
 
-					if (!this.stopped) this.reset();
+					if (!this.stopped) 
+					{
+						this.reset();
+					}
+					else
+					{
+						clearInterval(this.timer);
+					} 
 				},
 				setScore: function()
 				{
@@ -739,10 +759,10 @@
 				},
 				addToScore: function(rows)
 				{
-					var pointsPerRow = 100;
+					var pointsPerRow = 500;
 					var pointsPerStage = 1000;
 					this.score += (pointsPerRow * rows);
-					this.stage = Math.floor(this.score / pointsPerStage);
+					this.stage = Math.floor(this.score / pointsPerStage) + 1;
 
 					this.setScore();
 					this.setStage();
@@ -753,7 +773,7 @@
 					var diff = this.stage * 100;
 					interval = interval - diff;
 					if (interval < 100) interval = 100;
-
+console.log(interval);
 					return interval;
 				},
 				setCompletedRows: function(color)
@@ -851,7 +871,7 @@
 					<div class="pad dirPad">&nbsp;</div>
 					<div class="pad dirPad" onclick="game.moveRight()"><button>R</button></div>
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad" onclick="game.moveDown()"><button>D</button></div>
+					<div class="pad dirPad" onclick="game.drop()"><button>D</button></div>
 					<div class="pad">&nbsp;</div>
 				</div>
 			</div>
