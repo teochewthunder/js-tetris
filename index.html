@@ -29,6 +29,14 @@
 				background-color: rgba(255, 255, 255, 0.2);
 			}
 
+			#header p
+			{
+				padding-top: 10px;
+				text-align: center;
+				font-weight: bold;
+				letter-spacing: 2em;
+			}
+
 			#topDisplay
 			{
 				width: 200px;
@@ -759,7 +767,7 @@
 				},
 				addToScore: function(rows)
 				{
-					var pointsPerRow = 500;
+					var pointsPerRow = 100;
 					var pointsPerStage = 1000;
 					this.score += (pointsPerRow * rows);
 					this.stage = Math.floor(this.score / pointsPerStage) + 1;
@@ -773,7 +781,7 @@
 					var diff = this.stage * 100;
 					interval = interval - diff;
 					if (interval < 100) interval = 100;
-console.log(interval);
+
 					return interval;
 				},
 				setCompletedRows: function(color)
