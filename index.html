@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>JS Tetris</title>
 
 		<style>
@@ -152,6 +153,7 @@
 				width: 50px;
 				height: 50px;
 				border-radius: 50%;
+				font-size: 3em;
 			}
 
 			.buttons:nth-of-type(2) button
@@ -159,6 +161,7 @@
 				width: 50px;
 				height: 50px;
 				border-radius: 50%;
+				font-size: 3em;
 			}
 
 			.yellow::before
@@ -863,23 +866,23 @@
 			<div id="footer">
 				<div class="buttons">
 					<br />
-					<button onclick="game.rotateBlock()">R</button>
+					<button onclick="game.rotateBlock()">&#8635;</button>
 				</div>
 
 				<div class="buttons">
 					<br />
-					<button onclick="game.setStop()">S</button>
+					<button onclick="game.setStop()">&#9737;</button>
 				</div>
 
 				<div class="buttons">
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad" onclick="game.setPause(false)"><button>U</button></div>
+					<div class="pad dirPad" onclick="game.setPause(false)"><button>&#9650;</button></div>
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad" onclick="game.moveLeft()"><button>L</button></div>
+					<div class="pad dirPad" onclick="game.moveLeft()"><button>&#9664;</button></div>
 					<div class="pad dirPad">&nbsp;</div>
-					<div class="pad dirPad" onclick="game.moveRight()"><button>R</button></div>
+					<div class="pad dirPad" onclick="game.moveRight()"><button>&#9654;</button></div>
 					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad" onclick="game.drop()"><button>D</button></div>
+					<div class="pad dirPad" onclick="game.drop()"><button>&#9660;</button></div>
 					<div class="pad">&nbsp;</div>
 				</div>
 			</div>
