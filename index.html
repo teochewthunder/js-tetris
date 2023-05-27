@@ -772,7 +772,7 @@
 				{
 					var pointsPerRow = 100;
 					var pointsPerStage = 1000;
-					this.score += (pointsPerRow * rows);
+					this.score += (pointsPerRow * rows * rows);
 					this.stage = Math.floor(this.score / pointsPerStage) + 1;
 
 					this.setScore();
