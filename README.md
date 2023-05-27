@@ -4,8 +4,12 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
 ## HTML
 - In the head, a meta tag with viewport specified needs to be there because there is going to be a lot of tapping on a mobile platform and we don't want stuff to shift.
 - A div that has the id `container`. It is meant to encapsulate all the visual elements of the game.
-    - A div that has the id `header`. It contains Stage, Score and Next Block data.
-        - Next Block
+    - A div that has the id `header`.
+        - A div that displays `stage` and `score` properties.
+        - A div that displays the next block.
+    - A div with the id `grid`.
+        - A div that contains the current block. (JavaScript generated)
+        - 20 divs (styled using `row`) of 10 divs each. Each of these sub-divs is styled with the CSS class `square`.
 
 ## CSS
 
