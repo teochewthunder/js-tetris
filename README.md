@@ -10,8 +10,17 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
     - A div with the id `grid`.
         - A div that contains the current block. (JavaScript generated)
         - 20 divs (styled using `row`) of 10 divs each. Each of these sub-divs is styled with the CSS class `square`.
-
+    - A div with the id `footer`.
+        - Three divs, each with the CSS class `footer`.
+        - The first and second div contain a round button for Rotate and Start/Stop functions.
+        - The third div has another div styled using `pad`. This has Pause, Left, Right and Down functions.
 ## CSS
+- For `grid`. This caters for a 20 x 10 square grid.
+    - `row`. 20 pixels height, fills entire width.
+        - `square`. 20 pixels height and width. 10 of these should fit in `row`.
+        - Each `square` potentially has a `before` psuedoselector if styled with a color. (`red`, `lime`, `purple`, `yellow`, `cyan`, `white`)
+    - `pauseScreen` and `stopScreen`. Has a `before` pseudoselector with translucent black background and white text. Invisible by default.
+- For `movingBlock`.
 
 ## JavaScript
 ### Properties
