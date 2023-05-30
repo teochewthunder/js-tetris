@@ -1,7 +1,8 @@
 # JS Tetris (in progress)
 This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS symbols, while the bulk of the action takes place within the methods of the JavaScript object, `game`.
 
-## HTML
+## HTML/CSS
+### General Layout
 - In the head, a meta tag with viewport specified needs to be there because there is going to be a lot of tapping on a mobile platform and we don't want stuff to shift.
 - A div that has the id `container`. It is meant to encapsulate all the visual elements of the game.
     - A div that has the id `header`.
@@ -14,13 +15,17 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
         - Three divs, each with the CSS class `footer`.
         - The first and second div contain a round button for Rotate and Start/Stop functions.
         - The third div has another div styled using `pad`. This has Pause, Left, Right and Down functions.
-## CSS
+### Grid and Blocks
 - For `grid`. This caters for a 20 x 10 square grid.
     - `row`. 20 pixels height, fills entire width.
         - `square`. 20 pixels height and width. 10 of these should fit in `row`.
         - Each `square` potentially has a `before` psuedoselector if styled with a color. (`red`, `lime`, `purple`, `yellow`, `cyan`, `white`)
     - `pauseScreen` and `stopScreen`. Has a `before` pseudoselector with translucent black background and white text. Invisible by default.
-- For `movingBlock`.
+- For `movingBlock`. This is a container with `overflow` property set to `hidden`.
+    - A div with id `moveingBlockAspects`. It has 400% width of its parent.
+        - 4 divs styled using `aspect`. Each of them have an unique id.
+            - `square`. 20 pixels height and width.
+            - Each `square` potentially has a `before` psuedoselector if styled with a color. (`red`, `lime`, `purple`, `yellow`, `cyan`, `white`)
 
 ## JavaScript
 ### Properties
