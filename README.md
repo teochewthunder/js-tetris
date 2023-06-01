@@ -23,12 +23,30 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
     - `pauseScreen` and `stopScreen`. Has a `before` pseudoselector with translucent black background and white text. Invisible by default.
 - For `movingBlock`. This is a container with `overflow` property set to `hidden`.
     - A div with id `moveingBlockAspects`. It has 400% width of its parent.
-        - 4 divs styled using `aspect`. Each of them have an unique id.
+        - 4 divs styled using `aspect`. Each of them have an unique id. Each of these cater for a 4 x 4 grid.
             - `square`. 20 pixels height and width.
             - Each `square` potentially has a `before` psuedoselector if styled with a color. (`red`, `lime`, `purple`, `yellow`, `cyan`, `white`)
+ - For `gridNext`. This caters for a 4 x 4 square grid.
+     - `square_small`. 10 pixels height and width.
+     - Each `square` potentially has a `before` psuedoselector if styled with a color. (`red`, `lime`, `purple`, `yellow`, `cyan`, `white`)
 
 ## JavaScript
 ### Properties
+- `grid`: A two-dimensional array which will be populated via JavaScript. It is supposed to have 20 elements of 10 elements each. Each element is either `null` or a string value from the `colors` array.
+- `colors`: An array containing the following elements - "red", "purple", "cyan", "yellow", "lime".
+- `currentBlock`: `null` by default, can be an object with two properties - `shape` and `color`.
+- `nextBlock`: `null` by default, can be an object with two properties - `shape` and `color`.
+- `currentPosition`: An object with properties `x`, `y` and `r`.
+- `timer`: `null` by default, used to start and stop timer.
+- `stage`: Integer to dictate current stage. Starts at 1.
+- `score`: Integer to keep track of current score. Starts at 0.
+- `paused`: Boolean that tracks if application is currently paused. `false` by default.
+- `stopped`: Boolean that tracks if application is currently stopped. `false` by default
+- `shapes`: A multi-dimensional array containing specifications for all the possible blocks and their possible rotations.
+    - 5 elements, one for each shape.
+    - Each shape has 4 elements, one for each rotation.
+    - Each rotation has 4 rows...
+    - ...and 4 columns. 
 
 ### Methods
 
