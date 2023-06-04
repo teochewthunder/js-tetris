@@ -49,4 +49,7 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
     - ...and 4 columns. 
 
 ### Methods
+- `reset()`: This method is used to reset properties to opening defaults.
+- `renderGrid()`: This method is run at least once after every turn. It renders the grid after clearing the container. Since the moving block container, as well as the Pause and Stop screens are inside the grid as well, these are also re-rendered. *POSSIBLE OPTIMIZATION POINT: Keep the grid squares and moving block and Pause and Stop screens in different continers within the gris so that less re-rendering is required.*
+- `getRandomBlock()`: Gets a random element from the `shapes` and `colors` arrays, and uses these to create an object to return. This will be either the value of `currentBlock` or `nextBlock`.
 
