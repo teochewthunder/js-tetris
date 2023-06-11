@@ -61,3 +61,8 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
 - `moveRight()`: Exits early if `stopped` or `paused` is `true`, or `isFullyInFrame()` returns `false`. Uses a "proposed" new position and runs it through `testPOsition()`. If `true`, update `x` property of `currentPosition` and run `positionBlock()`.
 - `moveDown()`: Exits early if `stopped` or `paused` is `true`. Uses a "proposed" new position and runs it through `testPOsition()`. If `true`, update `y` property of `currentPosition` and run `positionBlock()`.
 - `drop()`: Exits early if `stopped` or `paused` is `true`, or `isFullyInFrame()` returns `false`. Uses a "proposed" new position and runs it through `testPOsition()`. Pretty much repeats the functionality of `moveDown()` until `false` is returned from `testPosition`, moving the block down one row at a time. Runs `stopBlock()` at the end.
+- `stopBlock()`: The main point of this method is to "copy" the colors from the block over to the grid. During the process, however...
+    - completed rows are turned white.
+    - completed rows "disappear" and the grid is compacted.
+    - scores are calculated.
+
