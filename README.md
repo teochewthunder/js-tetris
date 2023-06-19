@@ -65,4 +65,6 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
     - completed rows are turned white.
     - completed rows "disappear" and the grid is compacted.
     - scores are calculated.
+- `setPause(isAuto)`: This toggles the `paused` property between `true` and `false`. In addition, if `isAuto` is `false`, it will display the PAUSED screen if `paused` is `true`. Timer functions are disabled if `paused` is `true`, and enabled otherwise.
+- `setStop()`: This toggles the `stopped` property between `true` and `false`. It will display the GAME OVER screen if `paused` is `true`. `reset()` is called if `stopped` is `true`, and timer functions enabled otherwise.
 
