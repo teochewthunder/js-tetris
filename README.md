@@ -69,4 +69,8 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
 - `setStop()`: This toggles the `stopped` property between `true` and `false`. It will display the GAME OVER screen if `paused` is `true`. `reset()` is called if `stopped` is `true`, and timer functions enabled otherwise.
 - `setScore()`: This populates the HTML placeholder with the value of the `score` property.
 - `setStage()`: This populates the HTML placeholder with the value of the `stage` property.
+- `addToScore()`: 
+- `getInterval()`: 
+- `setCompletedRows()`: 
+- `compactRows()`: 
 
