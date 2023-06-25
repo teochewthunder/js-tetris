@@ -69,8 +69,8 @@ This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS sy
 - `setStop()`: This toggles the `stopped` property between `true` and `false`. It will display the GAME OVER screen if `paused` is `true`. `reset()` is called if `stopped` is `true`, and timer functions enabled otherwise.
 - `setScore()`: This populates the HTML placeholder with the value of the `score` property.
 - `setStage()`: This populates the HTML placeholder with the value of the `stage` property.
-- `addToScore()`: 
-- `getInterval()`: 
-- `setCompletedRows()`: 
-- `compactRows()`: 
+- `addToScore()`: Determines the points total from the number of completed rows, increments `score` then updates `stage` based on `score`. Displays are updated as well.
+- `getInterval()`: Determines the interval in milliseconds based on `stage`.
+- `setCompletedRows(color)`: Goes through `grid`. If the row is "completed", the `completed` variable is incremented, and the entire row is set to `color`. This is not hardcoded because of the animation - we are going to set it to white, then nothing ("x"), then call `compactRows`.
+- `compactRows()`: Traverses `grid`, and any row that does *not* contain "x" is pushed to a new temp `grid`. The temp `grid` is then padded (using `unshft()`) with "blank" rows to make up the full 20 rows before the original `grid` is overwritten by the temp `grid`.
 
