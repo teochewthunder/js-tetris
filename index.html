@@ -27,7 +27,6 @@
 			{
 				width: 100%;
 				height: 100px;
-				background-color: rgba(255, 255, 255, 0.2);
 			}
 
 			#header p
@@ -114,9 +113,7 @@
 			#footer
 			{
 				width: 100%;
-				height: 100px;
-				float: left;
-				background-color: rgba(255, 255, 255, 0.2);		
+				height: 100px;		
 				text-align: center;
 			}
 
@@ -140,36 +137,27 @@
 				background-color: rgb(0, 0, 0);
 			}
 
+			.buttons button
+			{
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				font-size: 3em;
+			}
+
 			.pad button
 			{
 				width: 100%;
 				height: 100%;
 				background: none;
 				color: rgb(255, 255, 255);
-			}
-
-			.buttons:nth-of-type(1) button
-			{
-				width: 50px;
-				height: 50px;
-				border-radius: 50%;
-				font-size: 3em;
-			}
-
-			.buttons:nth-of-type(2) button
-			{
-				width: 50px;
-				height: 50px;
-				border-radius: 50%;
-				font-size: 3em;
+				font-size: 1em;
 			}
 
 			.yellow::before
 			{
 				content: "";
 				display: block;
-				width: 18px;
-				height: 18px;
 				border: 1px solid rgb(255, 255, 0);
 				background-color: rgba(255, 255, 0, 0.8);
 			}
@@ -178,8 +166,6 @@
 			{
 				content: "";
 				display: block;
-				width: 18px;
-				height: 18px;
 				border: 1px solid rgb(0, 255, 255);
 				background-color: rgba(0, 255, 255, 0.8);
 			}
@@ -188,8 +174,6 @@
 			{
 				content: "";
 				display: block;
-				width: 18px;
-				height: 18px;
 				border: 1px solid rgb(0, 255, 0);
 				background-color: rgba(0, 255, 0, 0.8);
 			}
@@ -198,8 +182,6 @@
 			{
 				content: "";
 				display: block;
-				width: 18px;
-				height: 18px;
 				border: 1px solid rgb(255, 0, 255);
 				background-color: rgba(255, 0, 255, 0.8);
 			}
@@ -208,8 +190,6 @@
 			{
 				content: "";
 				display: block;
-				width: 18px;
-				height: 18px;
 				border: 1px solid rgb(255, 0, 0);
 				background-color: rgba(255, 0, 0, 0.8);
 			}
@@ -218,11 +198,15 @@
 			{
 				content: "";
 				display: block;
-				width: 18px;
-				height: 18px;
 				border: 1px solid rgb(255, 255, 255);
 				background-color: rgba(255, 255, 255, 0.8);
 			}
+
+			.square::before
+			{
+				width: 18px;
+				height: 18px;
+			}			
 
 			.square_small::before
 			{
@@ -540,10 +524,10 @@
 				},
 				positionBlock: function()
 				{
-					var container = document.getElementById("movingBlockAspects");
-					container.style.marginLeft = "-" + (this.currentPosition.r * 100) + "%";
+					var containerAspects = document.getElementById("movingBlockAspects");
+					containerAspects.style.marginLeft = "-" + (this.currentPosition.r * 100) + "%";
 
-					container = document.getElementById("movingBlock");
+					var container = document.getElementById("movingBlock");
 					container.style.marginLeft = (this.currentPosition.x * 20) + "px";
 					container.style.marginTop = (this.currentPosition.y * 20) + "px";
 				},
@@ -621,6 +605,7 @@
 				moveDown: function()
 				{
 					if (this.paused || this.stopped) return;
+
 					var y = (this.currentPosition.y + 1);
 					if (!this.testPosition(this.currentPosition.x, y, this.currentPosition.r)) 
 					{
@@ -834,16 +819,16 @@
 		</script>
 	</head>
 
-	<body onload = game.reset();>
+	<body onload="game.reset();">
 		<div id="container">
 			<div id="header">
 				<p>TETRIS</p>
 				<div id="topDisplay">
 					<div id="header_left">
-						STAGE<br />
-						<span id="txtStage">0</span><br />
-						SCORE<br />
-						<span id="txtScore">0</span><br />
+						<b>STAGE</b><br />
+						<span id="txtStage"></span><br />
+						<b>SCORE</b><br />
+						<span id="txtScore"></span><br />
 					</div>
 
 					<div id="header_right">
@@ -853,14 +838,7 @@
 			</div>
 
 			<div id="grid">
-				<div id="movingBlock">
-					<div id="movingBlockAspects">
-						<div id="aspect0" class="aspect"></div>
-						<div id="aspect1" class="aspect"></div>
-						<div id="aspect2" class="aspect"></div>
-						<div id="aspect" class="aspect"></div>
-					</div>
-				</div>
+
 			</div>
 
 			<div id="footer">
@@ -875,8 +853,8 @@
 				</div>
 
 				<div class="buttons">
-					<div class="pad">&nbsp;</div>
-					<div class="pad dirPad" onclick="game.setPause(false)"><button>&#9650;</button></div>
+ 					<div class="pad">&nbsp;</div>
+					<div class="pad dirPad"  onclick="game.setPause(false)"><button>&#9650;</button></div>
 					<div class="pad">&nbsp;</div>
 					<div class="pad dirPad" onclick="game.moveLeft()"><button>&#9664;</button></div>
 					<div class="pad dirPad">&nbsp;</div>
