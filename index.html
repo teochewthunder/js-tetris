@@ -455,13 +455,11 @@
 					for(var i = 0; i < this.grid.length; i++)
 					{
 						var row = document.createElement("div");
-						row.id = "row_" + i;
 						row.className = "row";
 
 						for(var j = 0; j < this.grid[i].length; j++)
 						{
 							var square = document.createElement("div");
-							square.id = i + "_" + j;
 							square.className = "square " + this.grid[i][j];
 							row.appendChild(square);
 						}
