@@ -1,4 +1,4 @@
-# JS Tetris (in progress)
+# JS Tetris
 This is Tetris written in vanilla JavaScript. The buttons are rendered in CSS symbols, while the bulk of the action takes place within the methods of the JavaScript object, `game`.
 
 ## HTML/CSS
